@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<img id="img" src="" alt="">
+<img id="img" src="GIF.gif" alt="">
 
 <div id="mute-btn">
   <svg id="icon-sound" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -60,28 +60,23 @@
 
 <script>
   const audio = document.getElementById('audio');
-  const img = document.getElementById('img');
   const muteBtn = document.getElementById('mute-btn');
   const iconSound = document.getElementById('icon-sound');
   const iconMute = document.getElementById('icon-mute');
   let started = false;
 
-  function updateState() {
-    const playing = started && !audio.muted;
-    img.src = playing ? 'GIF.gif' : '';
-    iconSound.style.display = playing ? 'block' : 'none';
-    iconMute.style.display = playing ? 'none' : 'block';
+  function updateIcon() {
+    iconSound.style.display = audio.muted ? 'none' : 'block';
+    iconMute.style.display = audio.muted ? 'block' : 'none';
   }
 
   muteBtn.addEventListener('click', () => {
     if (!started) {
       audio.play();
       started = true;
-      audio.muted = false;
-    } else {
-      audio.muted = !audio.muted;
     }
-    updateState();
+    audio.muted = !audio.muted;
+    updateIcon();
   });
 </script>
 
