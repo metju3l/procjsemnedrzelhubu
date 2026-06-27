@@ -19,7 +19,7 @@
   #mute-btn {
     position: fixed;
     top: 16px;
-    left: 16px;
+    right: 16px;
     z-index: 10;
     background: none;
     border: none;
@@ -46,13 +46,17 @@
   </svg>
 </button>
 
-<audio id="audio" src="song.mp3" loop autoplay></audio>
+<audio id="audio" src="song.mp3" loop autoplay muted></audio>
 
 <script>
   const audio = document.getElementById('audio');
   const btn = document.getElementById('mute-btn');
   const iconSound = document.getElementById('icon-sound');
   const iconMute = document.getElementById('icon-mute');
+
+  // Start muted so autoplay works, unmute on first interaction
+  iconSound.style.display = 'none';
+  iconMute.style.display = 'block';
 
   function updateIcon() {
     if (audio.muted) {
@@ -64,14 +68,17 @@
     }
   }
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
     audio.muted = !audio.muted;
     updateIcon();
   });
 
-  // Browsers block autoplay until user interaction — resume on first click anywhere
-  document.addEventListener('click', () => { audio.play().catch(() => {}); }, { once: true });
-  audio.play().catch(() => {});
+  // Unmute on first click anywhere on the page
+  document.addEventListener('click', () => {
+    audio.muted = false;
+    updateIcon();
+  }, { once: true });
 </script>
 
 </body>
